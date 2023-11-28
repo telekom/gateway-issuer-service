@@ -1,0 +1,8 @@
+include:
+  - project: 'dhei/teams/hyperion/dev/src/foundation-build'
+    file: '/pipelines/java-maven-docker-release-pipeline.yaml'
+    ref: 16.1.0
+
+variables:
+  PUSH_TO_HARBOR: "true"
+  MAVEN_ADD_OPTS: "-DskipTests"
