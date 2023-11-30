@@ -30,7 +30,8 @@ github-push:
   stage: .post
   needs: []
   rules:
-    - when: manual
+    - if: $CI_PROJECT_NAME == "stargate-issuer-service"
+      when: manual
   script:
     - git remote add github https://$STARGATE_GITHUB_PAT@github.com/telekom/stargate-issuer-service.git
     - git remote -v
@@ -42,7 +43,8 @@ gitlab-push:
   stage: .post
   needs: []
   rules:
-    - when: manual
+    - if: $CI_PROJECT_NAME == "stargate-issuer-service"
+      when: manual
   script:
     - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@$CI_SERVER_HOST/dhei/teams/hyperion/dev/src/issuer-service.git
     - git remote -v
@@ -54,7 +56,8 @@ gitlab-pull:
   stage: .post
   needs: []
   rules:
-    - when: manual
+    - if: $CI_PROJECT_NAME == "stargate-issuer-service"
+      when: manual
   variables:
     TARGET_BRANCH: main
   script:
