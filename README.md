@@ -4,12 +4,16 @@ SPDX-FileCopyrightText: 2023 Deutsche Telekom AG
 SPDX-License-Identifier: CC0-1.0    
 -->
 
-# my-sample-project
+# Issuer-service
 
 ## About
 
-This project is ...
-<!-- TODO -->
+Enables customers to validate Oauth2 tokens issued by related Stargate. Following endpoints are available:
+
+* Token endpoint
+* Discovery endpoint
+* Certificate endpoint
+* Userinfo endpoint
 
 ## Code of Conduct
 
@@ -22,26 +26,96 @@ By participating in this project, you agree to abide by its [Code of Conduct](./
 This project follows the [REUSE standard for software licensing](https://reuse.software/).
 Each file contains copyright and license information, and license texts can be found in the [./LICENSES](./LICENSES) folder. For more information visit https://reuse.software/.
 
-### REUSE
+## Token endpoint
+Provides public key for given realm. Can be obtained from:
 
-The [reuse tool](https://github.com/fsfe/reuse-tool) can be used to verify and establish compliance when new files are added. 
+<em>Note: please be aware, that example is showing local endpoint, which will differ to exposed one!</em> 
 
-For more information on the reuse tool visit https://github.com/fsfe/reuse-tool.
+``curl -X GET \
+http://${host}:${port}/api/v1/issuer/${realm}``
 
-**Check for incompliant files (= not properly licensed)**
+As a result, you should get a response as follows:
 
-Run `pipx run reuse lint`
+``
+{
+"realm": "default",
+"public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA061GdxffIBvqgozjnCvkEd48++lh5ERUjSGLoAWCbp3Y4Lf7S3GiWN25+673Tfxb29LKe6evSl7yKT2b105JuwGokx2Geedw2BVkQhRZXpDbG5NV/4n3186SN77sEeuuuXW2QqrX9MmSGdX4CvZ6DjCOtRAA4cV/i+o77NLWpT7kx8YxWyMrAWJxxEOF1Y9suwz9d2hjOn2oeebf6GpbfaM4wJJdSgWeqyTzrF+Jr4rQeGP7gjAhrJWAEadQl0wUzwQoTIQlcUQ43Xo0N8KKP/Pj6r0fOwHQ7dKIXhnAiIV1L8boe+YkrW1ZRKVjAc3lNpKoFK1TQvDJRqnxG/E6aQIDAQAB"
+}
+``
 
-**Get an SPDX file with all licensing information for this project (not for dependencies!)**
+## Certificate endpoint
+Provides list of certificates. Correct one is matched based on key id ``kid`` from authorization token header. Can be obtained from:
 
-Run `pipx run reuse spdx`
+``curl -X GET \
+http://${host}:${port}/api/v1/certs/${realm}``
 
-**Add licensing and copyright statements to a new file**
+As a result, you should get a response as follows:
 
-Run `pipx run reuse annotate -c="<COPYRIGHT>" -l="<LICENSE-SPDX-IDENTIFIER>" <file>`
+``
+{
+"keys": [
+{
+"kid": "6288e36f-b0d2-42c7-b739-1bd6c4ef0746",
+"kty": "RSA",
+"alg": "RS256",
+"use": "sig",
+"n": "061GdxffIBvqgozjnCvkEd48--lh5ERUjSGLoAWCbp3Y4Lf7S3GiWN25-673Tfxb29LKe6evSl7yKT2b105JuwGokx2Geedw2BVkQhRZXpDbG5NV_4n3186SN77sEeuuuXW2QqrX9MmSGdX4CvZ6DjCOtRAA4cV_i-o77NLWpT7kx8YxWyMrAWJxxEOF1Y9suwz9d2hjOn2oeebf6GpbfaM4wJJdSgWeqyTzrF-Jr4rQeGP7gjAhrJWAEadQl0wUzwQoTIQlcUQ43Xo0N8KKP_Pj6r0fOwHQ7dKIXhnAiIV1L8boe-YkrW1ZRKVjAc3lNpKoFK1TQvDJRqnxG_E6aQ",
+"e": "AQAB",
+"x5c": [
+"MIIDITCCAgmgAwIBAgIUSpT62Euj58/ur9xX/B3fhboAEwEwDQYJKoZIhvcNAQELBQAwIDEeMBwGA1UEAwwVU3RhcmdhdGUudGVzdC5kZWZhdWx0MB4XDTIzMTEwOTE0MDA0NloXDTI2MDgwNTE0MDA0NlowIDEeMBwGA1UEAwwVU3RhcmdhdGUudGVzdC5kZWZhdWx0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA061GdxffIBvqgozjnCvkEd48++lh5ERUjSGLoAWCbp3Y4Lf7S3GiWN25+673Tfxb29LKe6evSl7yKT2b105JuwGokx2Geedw2BVkQhRZXpDbG5NV/4n3186SN77sEeuuuXW2QqrX9MmSGdX4CvZ6DjCOtRAA4cV/i+o77NLWpT7kx8YxWyMrAWJxxEOF1Y9suwz9d2hjOn2oeebf6GpbfaM4wJJdSgWeqyTzrF+Jr4rQeGP7gjAhrJWAEadQl0wUzwQoTIQlcUQ43Xo0N8KKP/Pj6r0fOwHQ7dKIXhnAiIV1L8boe+YkrW1ZRKVjAc3lNpKoFK1TQvDJRqnxG/E6aQIDAQABo1MwUTAdBgNVHQ4EFgQUQ/x0rBBxkjI5C2xWRag8B/uVKxswHwYDVR0jBBgwFoAUQ/x0rBBxkjI5C2xWRag8B/uVKxswDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAw8cyIHzoqEblBL8k0yue6b34YqriukC3JtnkB/WWcGWgMkLwVz0ZFP7yQkBoCqRd12On5SgFF+nyXNLpN05jj8L9q4W7o/3nli3s3U4fIXY408HTK5ujSehcORZBTFeghr16PAahZr68nCyzdU3/hisHgsOHY3MRKqHtleeKDKlvZ4dtWyM2TKKDff1FdRaThrgEIY/CJHTwVffe18LC8HE58PMIcqM8IsONuWOdDjLHdxcXdrLqr98dluXE7Lu3HPT2lOoZh/PP5a1WjADURI2s4czI2qQrZs+et68rtwb/q83WJdX3TA6Gw5XZoiyfhjyWNJ63U7pTI5eblXRwyQ=="
+],
+"x5t": "VK5ICOrx8xcyBDGpzxCbhIjib58",
+"x5t#S256": "EMtOvNVQz_1YCfF9cj2WYz_ZgEbYQXvyHaXKJX5K3Hg"
+}
+]
+}
+``
 
-Replace `<COPYRIGHT>` with the copyright holder, e.g "Deutsche Telekom AG", and `<LICENSE-SPDX-IDENTIFIER>` with the ID of the license the file should be under. For possible IDs see https://spdx.org/licenses/.
+## Discovery endpoint
 
-**Add a new license text**
+Provides a discovery document from which clients can obtain all necessary information to interact with Issuer Service, including endpoint locations and capabilities.
 
-Run `pipx run reuse download --all` to add license texts for all licenses detected in the project.
+The discovery document can be obtained from:
+
+``curl -X GET \
+http://${host}:${port}/api/v1/discovery/${realm}``
+
+As a result, you should get a response as follows:
+
+``
+{
+"issuer": "${host}:${port}/auth/realms/default",
+"jwks_uri": "${host}:${port}/auth/realms/default/protocol/openid-connect/certs",
+"authorization_endpoint": "${host}:${port}/auth/realms/default/protocol/openid-connect/auth",
+"response_types_supported": [
+"none"
+],
+"subject_types_supported": [
+"public"
+],
+"id_token_signing_alg_values_supported": [
+"RS256"
+]
+}
+``
+
+## Userinfo endpoint
+If provided token is successfully validate against given public key & issuer, provides basic information for particular user.
+
+The userinfo document can be obtained from:
+
+``curl --request GET \
+--url http://${host}:${port}/api/v1/userinfo/default \
+--header 'Authorization: Bearer <token>'``
+
+Example response for validated response would be:
+
+``
+{
+"sub": "b1c71897-fc93-466f-85df-60e0ae86bd98",
+"email_verified": false,
+"preferred_username": "service-account-test-consumer"
+}``
+
+## Authorization endpoint
+Not implemented on Issuer Service. 
