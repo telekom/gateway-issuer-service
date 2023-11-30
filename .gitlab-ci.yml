@@ -26,7 +26,7 @@ reuse-lint:
   script:
     - pipx run reuse lint
 
-github-sync:
+github-push:
   stage: .post
   needs: []
   rules:
@@ -44,7 +44,7 @@ gitlab-push:
   rules:
     - when: manual
   script:
-    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service.git
+    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@$CI_SERVER_HOST/dhei/teams/hyperion/dev/src/issuer-service.git
     - git remote -v
     - git remote update
     - git checkout -b $CI_COMMIT_BRANCH || true
@@ -58,10 +58,14 @@ gitlab-pull:
   variables:
     TARGET_BRANCH: main
   script:
-    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service.git
+    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@$CI_SERVER_HOST/dhei/teams/hyperion/dev/src/issuer-service.git
+    - git remote set-url --push origin https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
     - git remote -v
     - git remote update
     - git checkout -b $CI_COMMIT_BRANCH || true
     - git merge -X theirs --squash gitlab/$TARGET_BRANCH
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
     - >-
       git commit -m "chore: sync from gitlab"
+    - git push origin $CI_COMMIT_BRANCH
