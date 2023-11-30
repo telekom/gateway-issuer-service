@@ -35,5 +35,33 @@ github-sync:
     - git remote add github https://$STARGATE_GITHUB_PAT@github.com/telekom/stargate-issuer-service.git
     - git remote -v
     - git remote update
-    - git checkout -b $CI_COMMIT_BRANCH
+    - git checkout -b $CI_COMMIT_BRANCH || true
     - git push --set-upstream github $CI_COMMIT_BRANCH
+
+gitlab-push:
+  stage: .post
+  needs: []
+  rules:
+    - when: manual
+  script:
+    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service.git
+    - git remote -v
+    - git remote update
+    - git checkout -b $CI_COMMIT_BRANCH || true
+    - git push --set-upstream gitlab $CI_COMMIT_BRANCH
+
+gitlab-pull:
+  stage: .post
+  needs: []
+  rules:
+    - when: manual
+  variables:
+    TARGET_BRANCH: main
+  script:
+    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service.git
+    - git remote -v
+    - git remote update
+    - git checkout -b $CI_COMMIT_BRANCH || true
+    - git merge -X theirs --squash gitlab/$TARGET_BRANCH
+    - >-
+      git commit -m "chore: sync from gitlab"
