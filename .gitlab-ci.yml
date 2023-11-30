@@ -35,4 +35,5 @@ github-sync:
     - git remote add github https://$STARGATE_GITHUB_PAT@github.com/telekom/stargate-issuer-service.git
     - git remote -v
     - git remote update
+    - git checkout -b $CI_COMMIT_BRANCH
     - git push --set-upstream github $CI_COMMIT_BRANCH
