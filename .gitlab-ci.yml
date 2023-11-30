@@ -6,69 +6,15 @@ include:
   - project: "dhei/teams/hyperion/dev/src/foundation-build"
     file: "/pipelines/java-maven-docker-release-pipeline.yaml"
     ref: 16.1.0
+  - project: "dhei/teams/hyperion/dev/src/foundation-build"
+    file: "/pipelines/opensource-pipeline.yaml"
+    ref: 16.1.0
+    rules:
+      - if: $CI_PROJECT_NAME == "stargate-issuer-service"
 
 variables:
   PUSH_TO_HARBOR: "true"
   MAVEN_ADD_OPTS: "-DskipTests"
-
-reuse-lint:
-  stage: test
-  image:
-    name: "dockerhub.devops.telekom.de/python:3"
-    entrypoint: [""]
-  needs: []
-  rules:
-    - when: always
-  before_script: >-
-    python3 -m pip install --user --upgrade pipx && 
-    python3 -m pipx ensurepath &&
-    source ~/.bashrc
-  script:
-    - pipx run reuse lint
-
-github-push:
-  stage: .post
-  needs: []
-  rules:
-    - if: $CI_PROJECT_NAME == "stargate-issuer-service"
-      when: manual
-  script:
-    - git remote add github https://$STARGATE_GITHUB_PAT@github.com/telekom/stargate-issuer-service.git
-    - git remote -v
-    - git remote update
-    - git checkout -b $CI_COMMIT_BRANCH || true
-    - git push --set-upstream github $CI_COMMIT_BRANCH
-
-gitlab-push:
-  stage: .post
-  needs: []
-  rules:
-    - if: $CI_PROJECT_NAME == "stargate-issuer-service"
-      when: manual
-  script:
-    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@$CI_SERVER_HOST/dhei/teams/hyperion/dev/src/issuer-service.git
-    - git remote -v
-    - git remote update
-    - git checkout -b $CI_COMMIT_BRANCH || true
-    - git push --set-upstream gitlab $CI_COMMIT_BRANCH
-
-gitlab-pull:
-  stage: .post
-  needs: []
-  rules:
-    - if: $CI_PROJECT_NAME == "stargate-issuer-service"
-      when: manual
-  variables:
-    TARGET_BRANCH: main
-  script:
-    - git remote add gitlab https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@$CI_SERVER_HOST/dhei/teams/hyperion/dev/src/issuer-service.git
-    - git remote set-url --push origin https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-    - git remote -v
-    - git remote update
-    - git checkout -b $CI_COMMIT_BRANCH || true
-    - git merge -X theirs --squash gitlab/$TARGET_BRANCH
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-    - >-
-      git commit -m "chore: sync from gitlab"
-    - git push origin $CI_COMMIT_BRANCH
+  GITHUB_PROJECT_PATH: "telekom/stargate-issuer-service"
+  GITLAB_PROJECT_PATH: "dhei/teams/hyperion/dev/src/issuer-service"
+  GITLAB_SOURCE_BRANCH: main
