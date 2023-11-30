@@ -1,8 +1,37 @@
+# SPDX-FileCopyrightText: 2023 Deutsche Telekom AG
+#
+# SPDX-License-Identifier: CC0-1.0
+
 include:
-  - project: 'dhei/teams/hyperion/dev/src/foundation-build'
-    file: '/pipelines/java-maven-docker-release-pipeline.yaml'
+  - project: "dhei/teams/hyperion/dev/src/foundation-build"
+    file: "/pipelines/java-maven-docker-release-pipeline.yaml"
     ref: 16.1.0
 
 variables:
   PUSH_TO_HARBOR: "true"
   MAVEN_ADD_OPTS: "-DskipTests"
+
+reuse-lint:
+  stage: test
+  image:
+    name: "dockerhub.devops.telekom.de/python:3"
+    entrypoint: [""]
+  needs: []
+  rules:
+    - when: always
+  before_script: >-
+    python3 -m pip install --user --upgrade pipx && 
+    python3 -m pipx ensurepath &&
+    source ~/.bashrc
+  script:
+    - pipx run reuse lint
+
+github-sync:
+  stage: .post
+  needs: []
+  rules:
+    - when: manual
+  script:
+    - git remote add github https://$STARGATE_GITHUB_PAT@github.com/telekom/stargate-issuer-service.git
+    - git remote -v
+    - git push github $CI_COMMIT_BRANCH

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 Deutsche Telekom AG
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # Changelog
 
 ## [1.10.0](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/compare/1.9.0...1.10.0) (2023-11-07)

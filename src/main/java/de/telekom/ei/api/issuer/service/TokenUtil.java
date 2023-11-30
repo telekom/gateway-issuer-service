@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package de.telekom.ei.api.issuer.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
