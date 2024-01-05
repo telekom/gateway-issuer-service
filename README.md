@@ -8,7 +8,7 @@ SPDX-License-Identifier: CC0-1.0
 
 ## About
 
-Enables customers to validate Oauth2 tokens issued by related Stargate. Following endpoints are available:
+Enables customers to validate Oauth2 tokens issued by related Gateway. Following endpoints are available:
 
 * Token endpoint
 * Discovery endpoint
