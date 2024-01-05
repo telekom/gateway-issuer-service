@@ -10,11 +10,8 @@ include:
     file: "/pipelines/opensource-pipeline.yaml"
     ref: 16.1.0
     rules:
-      - if: $CI_PROJECT_NAME == "stargate-issuer-service"
+      - if: $IS_OPENSOURCE == "true"
 
 variables:
   PUSH_TO_HARBOR: "true"
   MAVEN_ADD_OPTS: "-DskipTests"
-  GITHUB_PROJECT_PATH: "telekom/stargate-issuer-service"
-  GITLAB_PROJECT_PATH: "dhei/teams/hyperion/dev/src/issuer-service"
-  GITLAB_SOURCE_BRANCH: main
