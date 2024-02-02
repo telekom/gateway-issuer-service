@@ -149,3 +149,25 @@ Example response for validated response would be:
 
 ## Authorization endpoint
 Not implemented on Issuer Service. 
+
+## How to generate a new (self-signed) certificate to be used with the Issuer Service
+
+### Docker-based
+
+If you are running in a different environment, you can build and use a Docker container to generate the certificate. To do so, run the following command:
+
+```bash
+docker build --platform linux/amd64 -t issuer-service-cert-generator -f Dockerfile.cert-gen .
+mkdir keys
+docker run --rm -v ./keys:/opt/app/keys -it issuer-service-cert-generator /bin/bash -c "DOMAIN=gateway.test ./createKeys.sh"
+```
+
+This will create the necessary keys in the `keys` directory.
+
+### WSL2
+If you are using a WSL2 environment, you can use the following command to generate a new self-signed certificate:
+
+```bash
+DOMAIN=gateway.test ./createKeys.sh
+```
+This will create the necessary keys in the `keys` directory.

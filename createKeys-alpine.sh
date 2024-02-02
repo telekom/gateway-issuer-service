@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# This script is to used with Windows WSL
+# This script is to used with Alpine Linux v3.x
 
 function base64url_encode {
   base64  \
@@ -15,7 +15,7 @@ function base64url_encode {
 
 function generate_keys {
   #create private key + certificate
-  openssl req -new -newkey rsa:2048 -nodes -keyout "$PRIVATE_KEY_FILE" -x509 -subj "//CN=${DOMAIN}" -days 1000 -out "$CERT_FILE"
+  openssl req -new -newkey rsa:2048 -nodes -keyout "$PRIVATE_KEY_FILE" -x509 -subj "/CN=${DOMAIN}" -days 1000 -out "$CERT_FILE"
   #create public key from private key
   openssl rsa -pubout -in "$PRIVATE_KEY_FILE" -out "$PUBLIC_KEY_FILE"
 }
@@ -85,11 +85,11 @@ CERT_JSON=$( jq -n \
   --arg kty "RSA" \
   --arg alg "RS256" \
   --arg use "sig" \
-  --arg n "$(openssl x509 -in "$CERT_FILE" -noout -modulus | sed 's/Modulus=//' | xxd -r -ps | base64url_encode | sed -z 's/\n//g')" \
+  --arg n "$(openssl x509 -in "$CERT_FILE" -noout -modulus | sed 's/Modulus=//' | xxd -r -p | base64url_encode | sed -z 's/\n//g')" \
   --arg e "AQAB" \
   --arg x5c "$(sed -e '1d;$d' < "$CERT_FILE" | sed -z 's/\n//g')" \
-  --arg x5t "$(openssl x509 -in "$CERT_FILE" -outform DER | shasum | xxd -r -ps | base64url_encode)" \
-  --arg x5t256 "$(openssl x509 -in "$CERT_FILE" -outform DER | sha256sum | xxd -r -ps | base64url_encode)" \
+  --arg x5t "$(openssl x509 -in "$CERT_FILE" -outform DER | shasum | xxd -r -p | base64url_encode)" \
+  --arg x5t256 "$(openssl x509 -in "$CERT_FILE" -outform DER | sha256sum | xxd -r -p | base64url_encode)" \
   '{ $env: {keys: [{kid: $kid, kty: $kty, alg: $alg, use: $use, n: $n, e: $e, x5c: [$x5c], x5t: $x5t, "x5t#S256": $x5t256}]}   }'
 )
 echo "$CERT_JSON" | jq | tee certs.json
