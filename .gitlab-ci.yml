@@ -5,10 +5,10 @@
 include:
   - project: "dhei/teams/hyperion/dev/src/foundation-build"
     file: "/pipelines/java-maven-docker-release-pipeline.yaml"
-    ref: 16.1.0
+    ref: main
   - project: "dhei/teams/hyperion/dev/src/foundation-build"
     file: "/pipelines/opensource-pipeline.yaml"
-    ref: 16.1.0
+    ref: main
     rules:
       - if: $IS_OPENSOURCE == "true"
 
