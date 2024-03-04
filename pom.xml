@@ -18,7 +18,7 @@ SPDX-License-Identifier: Apache-2.0
 	</parent>
 	<groupId>de.telekom.ei.service.issuer</groupId>
 	<artifactId>issuerService</artifactId>
-	<version>1.11.0.netty</version>
+	<version>1.11.1</version>
 	<name>issuerService</name>
 	<description>IssuerService</description>
 

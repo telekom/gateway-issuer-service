@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.11.1](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/compare/1.11.0...1.11.1) (2024-03-01)
+
+
+### 🦊 CI/CD
+
+* spring boot 3, switch to netty, actuator endpoint to default path ([8e192c6](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/commit/8e192c67d15f517bc456eac047d230bd6dff509f))
+
+
+### Other
+
+* added license-info to changelog ([b543751](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/commit/b543751761d3179c95d8fdc65b05c614fc52f477))
+* correct license for generated changelog file; fix reuse-config ([1e27a12](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/commit/1e27a12a07f5a18d992361a3e4d7858f9f24c861))
+* **release:** 1.11.0 ([7ad7536](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/commit/7ad753657fdb4f972a404a9f3313ea3cf2341846))
+* **reuse:** updated name ([3dd35a6](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/commit/3dd35a6943eefda277315949bac21b75b1c4c27c))
+
 ## [1.11.0](https://gitlab.devops.telekom.de/dhei/teams/hyperion/dev/src/issuer-service/compare/1.10.0...1.11.0) (2024-02-26)
 
 
