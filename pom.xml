@@ -13,12 +13,12 @@ SPDX-License-Identifier: Apache-2.0
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.16</version>
+		<version>3.2.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.telekom.ei.service.issuer</groupId>
 	<artifactId>issuerService</artifactId>
-	<version>1.11.0</version>
+	<version>1.11.0.netty</version>
 	<name>issuerService</name>
 	<description>IssuerService</description>
 
@@ -30,7 +30,7 @@ SPDX-License-Identifier: Apache-2.0
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 
 		<dependency>
