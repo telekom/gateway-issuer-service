@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM maven:3.9-eclipse-temurin-17-alpine AS build
+FROM maven:3.9-eclipse-temurin-17 AS build
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 ADD . /usr/app
@@ -10,10 +10,7 @@ ADD . /usr/app
 RUN mvn -f /usr/app/pom.xml clean package -DskipTests
 
 
-FROM eclipse-temurin:17-jre-alpine
-
-RUN addgroup -g 1000 -S app
-RUN adduser -u 1000 -D -H -S -G app app
+FROM eclipse-temurin:17-jre
 
 USER 1000:1000
 
