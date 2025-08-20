@@ -6,6 +6,8 @@ SPDX-License-Identifier: CC0-1.0
 
 # Issuer-service
 
+This repo has been archived in favor of the new [issuer-service-go](https://github.com/telekom/gateway-issuer-service-go).
+
 ## About
 
 Enables customers to validate Oauth2 tokens issued by related Gateway. Following endpoints are available:
